@@ -103,7 +103,6 @@ export default function Home() {
               ? allowedColors[currentScheme as keyof typeof allowedColors]
               : "#ffffff"
           }
-          isInverted={isInverted}
         />
       </div>
 

@@ -6,7 +6,6 @@ interface ColorInfoProps {
   bgHex: string;
   fgToken: string;
   fgHex: string;
-  isInverted: boolean;
 }
 
 export default function ColorInfo({
