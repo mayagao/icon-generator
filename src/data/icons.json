@@ -1,11 +1,11 @@
 {
   "allowedIcons": [
-    "CodescanIcon",
+    "CodeIcon",
     "DependabotIcon",
-    "PackageIcon",
+    "BookIcon",
     "ProjectRoadmapIcon",
     "TelescopeIcon",
-    "WorkflowIcon",
+    "OrganizationIcon",
     "TerminalIcon",
     "DatabaseIcon",
     "CloudIcon",

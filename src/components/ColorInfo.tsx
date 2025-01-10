@@ -25,7 +25,8 @@ export default function ColorInfo({
         >
           here
         </a>{" "}
-        so it will work automatically in all themes. <br />
+        so it will work automatically in all themes.
+        <br />
         <span className="text-gray-600">Background:</span>
         <span>{tokenName && bgToken ? ` var(${bgToken})` : ""}</span>
         <span className="ml-2">{bgHex}</span>
