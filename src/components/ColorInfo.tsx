@@ -1,19 +1,19 @@
 "use client";
 
-type ColorInfoProps = {
-  bgToken?: string;
+interface ColorInfoProps {
+  tokenName: string;
+  bgToken: string;
   bgHex: string;
-  fgToken?: string;
+  fgToken: string;
   fgHex: string;
-  tokenName?: string;
-};
+}
 
 export default function ColorInfo({
+  tokenName,
   bgToken,
   bgHex,
   fgToken,
   fgHex,
-  tokenName,
 }: ColorInfoProps) {
   return (
     <div className="text-sm text-[var(--color-fg-muted)]">

@@ -6,18 +6,19 @@ import { allowedIcons } from "@/data/icons.json";
 import { allowedColors } from "@/data/constants";
 import { SyncIcon, LogIcon } from "@primer/octicons-react";
 import IconCircle from "./IconCircle";
+import { IconComponent } from "@/types";
 
-type IconGeneratorProps = {
-  onIconChange?: (
-    icon: React.ComponentType<any>,
+interface IconGeneratorProps {
+  onIconChange: (
+    icon: IconComponent,
     color: string,
     isInverted: boolean,
     scheme: string
   ) => void;
-};
+}
 
 export default function IconGenerator({ onIconChange }: IconGeneratorProps) {
-  const [Icon, setIcon] = useState<React.ComponentType<any> | null>(null);
+  const [Icon, setIcon] = useState<IconComponent | null>(null);
   const [bgColor, setBgColor] = useState(allowedColors.blue);
   const [currentIconIndex, setCurrentIconIndex] = useState(0);
   const [currentScheme, setCurrentScheme] = useState("blue");
@@ -54,7 +55,9 @@ export default function IconGenerator({ onIconChange }: IconGeneratorProps) {
       iconIndex < allowedIcons.length + currentIconIndex
     ) {
       const iconName = allowedIcons[iconIndex % allowedIcons.length];
-      iconComponent = OcticonsModule[iconName as keyof typeof OcticonsModule];
+      iconComponent = OcticonsModule[
+        iconName as keyof typeof OcticonsModule
+      ] as IconComponent;
       if (!iconComponent) {
         iconIndex++;
       }
@@ -70,7 +73,12 @@ export default function IconGenerator({ onIconChange }: IconGeneratorProps) {
       setBgColor(newColor);
       setCurrentIconIndex((iconIndex + 1) % allowedIcons.length);
       setCurrentScheme(newScheme);
-      onIconChange?.(iconComponent, newColor, isInverted, newScheme);
+      onIconChange?.(
+        iconComponent as IconComponent,
+        newColor,
+        isInverted,
+        newScheme
+      );
     }
   };
 
