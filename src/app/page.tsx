@@ -211,20 +211,26 @@ export default function Home() {
 
         <div>
           <h2 className="text-lg font-semibold mb-2">Available Icons</h2>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-x-6 gap-y-2 mb-4">
             {icons.map((Icon, index) =>
               Icon ? (
                 <div
                   key={allowedIcons[index]}
                   className="flex items-center gap-2"
                 >
-                  <Icon size={24} />
-                  <span className="font-mono text-sm">
+                  <Icon size={16} />
+                  <span className="text-xs text-[var(--color-fg-muted)]">
                     {allowedIcons[index]}
                   </span>
                 </div>
               ) : null
             )}
+          </div>
+          <div className="mt-4">
+            <h3 className="text-sm font-semibold mb-2">Icon Names Array</h3>
+            <code className="block text-xs bg-[var(--color-canvas-subtle)] p-3 rounded select-all whitespace-pre">
+              {JSON.stringify(allowedIcons, null, 2)}
+            </code>
           </div>
         </div>
       </div>
