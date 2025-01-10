@@ -1,16 +1,16 @@
 {
   "allowedIcons": [
-    "ServerIcon",
-    "CodeIcon",
-    "BookIcon",
+    "CodescanIcon",
+    "DependabotIcon",
+    "PackageIcon",
+    "ProjectRoadmapIcon",
     "TelescopeIcon",
+    "WorkflowIcon",
+    "TerminalIcon",
+    "DatabaseIcon",
+    "CloudIcon",
+    "BroadcastIcon",
     "BeakerIcon",
-    "RocketIcon",
-    "GlobeIcon",
-    "LightBulbIcon",
-    "SquirrelIcon",
-    "ToolsIcon",
-    "MortarBoardIcon",
-    "OrganizationIcon"
+    "HubotIcon"
   ]
 }

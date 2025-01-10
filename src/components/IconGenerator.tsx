@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import * as OcticonsModule from "@primer/octicons-react";
 import { allowedIcons } from "@/data/icons.json";
 import { allowedColors } from "@/data/constants";
-import { SyncIcon, LogIcon } from "@primer/octicons-react";
+import { SyncIcon, SunIcon } from "@primer/octicons-react";
 import IconCircle from "./IconCircle";
 import { IconComponent } from "@/types";
 
@@ -98,20 +98,30 @@ export default function IconGenerator({ onIconChange }: IconGeneratorProps) {
           isInverted ? `var(--display-${currentScheme}-fgColor)` : "white"
         }
       />
-      <div className="flex gap-1">
+      <div
+        style={{
+          marginLeft: -20,
+          marginTop: 20,
+        }}
+        className="flex gap-1"
+      >
         <button
           onClick={generateNewIcon}
-          className="p-2 rounded-full hover:bg-[var(--color-canvas-subtle)]"
+          className="w-8 h-8 gray-600 flex items-center justify-center rounded-full border shadow-sm bg-white hover:shadow-md hover:gray-800 transition-all"
         >
           <SyncIcon size={16} />
         </button>
-        <button
-          onClick={() => setIsInverted(!isInverted)}
-          className="p-2 rounded-full hover:bg-[var(--color-canvas-subtle)]"
-        >
-          <LogIcon size={16} />
-        </button>
       </div>
+      <button
+        onClick={() => setIsInverted(!isInverted)}
+        style={{
+          position: "absolute",
+          right: 20,
+        }}
+        className="w-8 h-8 flex items-center justify-center rounded-full border shadow-sm bg-white hover:shadow-md hover:bg-[var(--color-canvas-subtle)] transition-all"
+      >
+        <SunIcon size={16} />
+      </button>
     </div>
   );
 }

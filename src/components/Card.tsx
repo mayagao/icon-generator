@@ -21,7 +21,7 @@ export default function Card({
 }: CardProps) {
   return (
     <div className="flex flex-col gap-4 p-4">
-      <div className="flex items-start gap-3">
+      <div className="">
         <div className="flex-shrink-0">
           <IconCircle
             Icon={Icon}
@@ -31,15 +31,11 @@ export default function Card({
           />
         </div>
         <div>
-          <div className="flex items-center gap-2">
-            <div className="font-medium text-base">{title}</div>
-            <span className="text-sm text-[var(--color-fg-muted)]">
-              {subtitle}
-            </span>
+          <div className="flex mt-2 items-center gap-2 text-sm">
+            <div className="font-semibold">{title}</div>
+            <span className="text-gray-600">{subtitle}</span>
           </div>
-          <div className="text-sm text-[var(--color-fg-muted)]">
-            {description}
-          </div>
+          <div className="text-xs text-gray-600">{description}</div>
         </div>
       </div>
     </div>

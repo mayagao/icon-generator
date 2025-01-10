@@ -44,6 +44,7 @@ export default function IconCircle({
       style={{
         backgroundColor: bgColor,
         color: fgColor,
+        border: "1px solid rgba(0,0,0,0.1)",
       }}
     >
       <Icon size={iconSize} />

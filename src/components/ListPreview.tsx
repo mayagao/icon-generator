@@ -9,7 +9,7 @@ export default function ListPreview() {
         <CodeIcon size={20} className="text-[var(--color-fg-muted)]" />
       </div>
       <div className="flex flex-col">
-        <div className="text-sm">Core engineering</div>
+        <div className="text-sm font-medium">Core engineering</div>
         <div className="text-xs text-[var(--color-fg-muted)]">@coreeng</div>
       </div>
     </div>

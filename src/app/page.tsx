@@ -12,6 +12,7 @@ import {
 } from "@/data/constants";
 import { useState, useEffect } from "react";
 import { IconComponent } from "@/types";
+import { CopyIcon } from "@primer/octicons-react";
 
 import ChatWelcome from "@/components/ChatWelcome";
 
@@ -48,6 +49,7 @@ export default function Home() {
   const [listIcons, setListIcons] = useState<IconComponent[]>([]);
   const [listColors, setListColors] = useState<string[]>([]);
   const [isInverted, setIsInverted] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
 
   useEffect(() => {
     // Get previous, current and next icons
@@ -82,9 +84,14 @@ export default function Home() {
     setCurrentScheme(scheme);
   };
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(JSON.stringify(allowedIcons, null, 2));
+    setShowCopied(true);
+    setTimeout(() => setShowCopied(false), 2000); // Hide after 2 seconds
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl mb-3">Random Icon Generator</h1>
       <div className="flex items-start gap-4 flex-wrap mb-8">
         <IconGenerator onIconChange={handleIconChange} />
         <ColorInfo
@@ -108,11 +115,10 @@ export default function Home() {
 
       <div className="grid gap-8">
         <div>
-          <h2 className="text-lg font-semibold mb-4">Preview</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg ">
             <div className="space-y-4">
               <div>
-                <div className="border border-[var(--color-border-muted)] rounded-lg overflow-hidden mb-2">
+                <div className="bg-white border-[var(--color-border-muted)] p-2 rounded-lg overflow-hidden mb-2">
                   <div className="flex flex-col">
                     {previewItems.map((item, index) => (
                       <ListItem
@@ -162,7 +168,7 @@ export default function Home() {
               </div>
 
               <div>
-                <div className="border border-[var(--color-border-muted)] rounded-lg overflow-hidden mb-2">
+                <div className=" bg-white rounded-lg overflow-hidden mb-2">
                   <Card
                     Icon={currentIcon}
                     bgColor={
@@ -186,8 +192,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div>
-              <div className="border border-[var(--color-border-muted)] rounded-lg overflow-hidden mb-2">
+            <div className="h-full flex flex-col">
+              <div className="bg-white flex items-center p-4 justify-center rounded-lg overflow-hidden mb-2 flex-grow">
                 {currentIcon && (
                   <ChatWelcome
                     Icon={currentIcon}
@@ -212,27 +218,45 @@ export default function Home() {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold mb-2">Available Icons</h2>
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-x-6 gap-y-2 mb-4">
-            {icons.map((Icon, index) =>
-              Icon ? (
-                <div
-                  key={allowedIcons[index]}
-                  className="flex items-center gap-2"
-                >
-                  <Icon size={16} />
-                  <span className="text-xs text-[var(--color-fg-muted)]">
-                    {allowedIcons[index]}
-                  </span>
-                </div>
-              ) : null
-            )}
-          </div>
-          <div className="mt-4">
-            <h3 className="text-sm font-semibold mb-2">Icon Names Array</h3>
-            <code className="block text-xs bg-[var(--color-canvas-subtle)] p-3 rounded select-all whitespace-pre">
-              {JSON.stringify(allowedIcons, null, 2)}
-            </code>
+          <div className="flex gap-8">
+            <div className="w-1/2">
+              <h2 className="text-sm font-semibold">Allowed Icons</h2>
+              <p className="text-xs text-gray-600 mt-1">
+                Avoid UI-specific actions (like delete, edit, close)
+                <br /> Are abstract enough to represent various developer
+                concepts
+                <br />
+                Maintain visual consistency with similar amount of detail
+              </p>
+              <button
+                onClick={handleCopy}
+                className="mt-4 text-xs flex items-center gap-2 text-blue-600 font-medium hover:text-[var(--color-fg-default)] relative"
+              >
+                <CopyIcon size={16} />
+                <span>Copy icon names array</span>
+
+                {showCopied && (
+                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-800 rounded text-white whitespace-nowrap">
+                    Copied!
+                  </div>
+                )}
+              </button>
+            </div>
+            <div className="w-1/2 grid grid-cols-2 gap-x-6 gap-y-2">
+              {icons.map((Icon, index) =>
+                Icon ? (
+                  <div
+                    key={allowedIcons[index]}
+                    className="flex items-center gap-2"
+                  >
+                    <Icon size={16} />
+                    <span className="text-xs text-[var(--color-fg-muted)]">
+                      {allowedIcons[index]}
+                    </span>
+                  </div>
+                ) : null
+              )}
+            </div>
           </div>
         </div>
       </div>

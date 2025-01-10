@@ -18,7 +18,7 @@ export default function ListItem({
   handle,
 }: ListItemProps) {
   return (
-    <div className="flex items-center gap-2 h-8 px-2">
+    <div className="flex items-center gap-2 h-7 px-2">
       <div className="flex-shrink-0">
         <IconCircle
           Icon={Icon}
@@ -28,8 +28,10 @@ export default function ListItem({
         />
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-sm">{title}</span>
-        <span className="text-sm text-[var(--color-fg-muted)]">{handle}</span>
+        <span style={{ fontSize: 14 }} className="text-sm font-semibold">
+          {title}
+        </span>
+        <span className="text-xs text-gray-600">{handle}</span>
       </div>
     </div>
   );
