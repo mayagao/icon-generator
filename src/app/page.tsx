@@ -5,6 +5,8 @@ import * as OcticonsModule from "@primer/octicons-react";
 import { allowedIcons } from "@/data/icons.json";
 import { allowedColors, colorTokens } from "@/data/constants";
 import { useState, useEffect } from "react";
+import type { IconProps } from "@primer/octicons-react";
+import type { IconDisplay } from "@/types/icons";
 
 import ChatWelcome from "@/components/ChatWelcome";
 
@@ -12,9 +14,30 @@ import ListItem from "@/components/ListItem";
 import Card from "@/components/Card";
 import ColorInfo from "@/components/ColorInfo";
 
+// Update icon component types
+type IconDisplayProps = {
+  size?: number;
+  className?: string;
+};
+
+type IconComponent = React.ComponentType<IconProps>;
+type IconDisplay = React.ComponentType<IconDisplayProps>;
+
+// Create adapter function
+const adaptIcon = (Icon: IconComponent): IconDisplay => {
+  return function WrappedIcon(props: IconDisplayProps = {}) {
+    const { size = 16, className } = props;
+    return <Icon size={size} className={className} />;
+  };
+};
+
+// Update icons mapping
 const icons = allowedIcons
-  .map((iconName) => OcticonsModule[iconName as keyof typeof OcticonsModule])
-  .filter(Boolean);
+  .map((iconName) => {
+    const Icon = OcticonsModule[iconName as keyof typeof OcticonsModule];
+    return Icon ? adaptIcon(Icon) : null;
+  })
+  .filter(Boolean) as IconDisplay[];
 
 const previewItems = [
   {
@@ -54,20 +77,13 @@ export default function Home() {
     "yellow",
   ];
 
-  const [currentIcon, setCurrentIcon] = useState(icons[0]);
+  const [currentIcon, setCurrentIcon] = useState<IconDisplay>(icons[0]);
   const [currentColor, setCurrentColor] = useState(allowedColors.blue);
   const [currentScheme, setCurrentScheme] = useState("blue");
-  const [listIcons, setListIcons] = useState<React.ComponentType<any>[]>([]);
+  const [listIcons, setListIcons] = useState<IconDisplay[]>([]);
   const [listColors, setListColors] = useState<string[]>([]);
   const [isInverted, setIsInverted] = useState(false);
-
-  const getUniqueRandomItems = <T extends unknown>(
-    items: T[],
-    count: number
-  ): T[] => {
-    const shuffled = [...items].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-  };
+  const [Icon, setIcon] = useState<IconDisplay | null>(null);
 
   useEffect(() => {
     // Get previous, current and next icons
@@ -88,10 +104,10 @@ export default function Home() {
       currentScheme,
       schemes[nextSchemeIndex],
     ]);
-  }, [isInverted, currentIcon, currentScheme]);
+  }, [isInverted, currentIcon, currentScheme, schemes]);
 
   const handleIconChange = (
-    icon: React.ComponentType<any>,
+    icon: IconDisplay,
     color: string,
     inverted: boolean,
     scheme: string
@@ -102,16 +118,15 @@ export default function Home() {
     setCurrentScheme(scheme);
   };
 
-  const getRandomIcon = () => {
-    const index = Math.floor(Math.random() * icons.length);
-    return icons[index];
-  };
+  // const getRandomIcon = () => {
+  //   const index = Math.floor(Math.random() * icons.length);
+  //   return icons[index];
+  // };
 
-  const getRandomColor = () => {
-    const index = Math.floor(Math.random() * allowedColors.length);
-    return allowedColors[index];
-  };
-
+  // const getRandomColor = () => {
+  //   const randomScheme = schemes[Math.floor(Math.random() * schemes.length)];
+  //   return allowedColors[randomScheme as keyof typeof allowedColors];
+  // };
   return (
     <div className="p-4">
       <h1 className="text-2xl mb-3">Random Icon Generator</h1>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as OcticonsModule from "@primer/octicons-react";
 import { allowedIcons } from "@/data/icons.json";
 import { allowedColors } from "@/data/constants";
@@ -45,7 +45,7 @@ export default function IconGenerator({ onIconChange }: IconGeneratorProps) {
     "yellow",
   ];
 
-  const generateNewIcon = () => {
+  const generateNewIcon = useCallback(() => {
     let iconIndex = currentIconIndex;
     let iconComponent = null;
 
@@ -72,11 +72,11 @@ export default function IconGenerator({ onIconChange }: IconGeneratorProps) {
       setCurrentScheme(newScheme);
       onIconChange?.(iconComponent, newColor, isInverted, newScheme);
     }
-  };
+  }, [currentIconIndex, isInverted, onIconChange]);
 
   useEffect(() => {
     generateNewIcon();
-  }, [isInverted]);
+  }, [isInverted, generateNewIcon]);
 
   if (!Icon) return null;
 
