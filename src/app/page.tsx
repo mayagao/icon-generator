@@ -3,7 +3,12 @@
 import IconGenerator from "@/components/IconGenerator";
 import * as OcticonsModule from "@primer/octicons-react";
 import { allowedIcons } from "@/data/icons.json";
-import { allowedColors, colorTokens } from "@/data/constants";
+import {
+  allowedColors,
+  colorTokens,
+  schemes,
+  SchemeType,
+} from "@/data/constants";
 import { useState, useEffect } from "react";
 
 import ChatWelcome from "@/components/ChatWelcome";
@@ -32,31 +37,9 @@ const previewItems = [
 ];
 
 export default function Home() {
-  const schemes = [
-    "auburn",
-    "blue",
-    "brown",
-    "coral",
-    "cyan",
-    "gray",
-    "green",
-    "indigo",
-    "lemon",
-    "lime",
-    "olive",
-    "orange",
-    "pine",
-    "pink",
-    "plum",
-    "purple",
-    "red",
-    "teal",
-    "yellow",
-  ];
-
   const [currentIcon, setCurrentIcon] = useState(icons[0]);
   const [currentColor, setCurrentColor] = useState(allowedColors.blue);
-  const [currentScheme, setCurrentScheme] = useState("blue");
+  const [currentScheme, setCurrentScheme] = useState<SchemeType>("blue");
   const [listIcons, setListIcons] = useState<React.ComponentType<any>[]>([]);
   const [listColors, setListColors] = useState<string[]>([]);
   const [isInverted, setIsInverted] = useState(false);
@@ -100,16 +83,6 @@ export default function Home() {
     setCurrentColor(allowedColors[scheme as keyof typeof allowedColors]);
     setIsInverted(inverted);
     setCurrentScheme(scheme);
-  };
-
-  const getRandomIcon = () => {
-    const index = Math.floor(Math.random() * icons.length);
-    return icons[index];
-  };
-
-  const getRandomColor = () => {
-    const index = Math.floor(Math.random() * allowedColors.length);
-    return allowedColors[index];
   };
 
   return (

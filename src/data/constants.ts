@@ -118,3 +118,28 @@ export const colorTokens = {
     solid: "--display-yellow-bgColor-emphasis",
   },
 };
+
+export const schemes = [
+  "auburn",
+  "blue",
+  "brown",
+  "coral",
+  "cyan",
+  "gray",
+  "green",
+  "indigo",
+  "lemon",
+  "lime",
+  "olive",
+  "orange",
+  "pine",
+  "pink",
+  "plum",
+  "purple",
+  "red",
+  "teal",
+  "yellow",
+];
+
+// Add a type to ensure type safety when using scheme names
+export type SchemeType = (typeof schemes)[number];
