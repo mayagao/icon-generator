@@ -2,7 +2,8 @@
 
 import IconGenerator from "@/components/IconGenerator";
 import * as OcticonsModule from "@primer/octicons-react";
-import { allowedIcons } from "@/data/icons.json";
+import iconData from "@/data/icons.json";
+const { allowedIcons } = iconData;
 import {
   allowedColors,
   colorTokens,
@@ -10,6 +11,7 @@ import {
   SchemeType,
 } from "@/data/constants";
 import { useState, useEffect } from "react";
+import { IconComponent } from "@/types";
 
 import ChatWelcome from "@/components/ChatWelcome";
 
@@ -17,8 +19,11 @@ import ListItem from "@/components/ListItem";
 import Card from "@/components/Card";
 import ColorInfo from "@/components/ColorInfo";
 
-const icons = allowedIcons
-  .map((iconName) => OcticonsModule[iconName as keyof typeof OcticonsModule])
+const icons: IconComponent[] = allowedIcons
+  .map(
+    (iconName) =>
+      OcticonsModule[iconName as keyof typeof OcticonsModule] as IconComponent
+  )
   .filter(Boolean);
 
 const previewItems = [
@@ -37,20 +42,12 @@ const previewItems = [
 ];
 
 export default function Home() {
-  const [currentIcon, setCurrentIcon] = useState(icons[0]);
+  const [currentIcon, setCurrentIcon] = useState<IconComponent>(icons[0]);
   const [currentColor, setCurrentColor] = useState(allowedColors.blue);
   const [currentScheme, setCurrentScheme] = useState<SchemeType>("blue");
-  const [listIcons, setListIcons] = useState<React.ComponentType<any>[]>([]);
+  const [listIcons, setListIcons] = useState<IconComponent[]>([]);
   const [listColors, setListColors] = useState<string[]>([]);
   const [isInverted, setIsInverted] = useState(false);
-
-  const getUniqueRandomItems = <T extends unknown>(
-    items: T[],
-    count: number
-  ): T[] => {
-    const shuffled = [...items].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-  };
 
   useEffect(() => {
     // Get previous, current and next icons
@@ -74,7 +71,7 @@ export default function Home() {
   }, [isInverted, currentIcon, currentScheme]);
 
   const handleIconChange = (
-    icon: React.ComponentType<any>,
+    icon: IconComponent,
     color: string,
     inverted: boolean,
     scheme: string
@@ -121,7 +118,13 @@ export default function Home() {
                     {previewItems.map((item, index) => (
                       <ListItem
                         key={item.handle}
-                        Icon={listIcons[index] || currentIcon}
+                        Icon={
+                          listIcons[index] ||
+                          (currentIcon as React.ComponentType<{
+                            size: number;
+                            className?: string;
+                          }>)
+                        }
                         bgColor={
                           isInverted
                             ? `var(${
