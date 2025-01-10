@@ -3,7 +3,7 @@
 import IconGenerator from "@/components/IconGenerator";
 import * as OcticonsModule from "@primer/octicons-react";
 import { allowedIcons } from "@/data/icons.json";
-import { allowedColors, mutedScheme, colorTokens } from "@/data/constants";
+import { allowedColors, colorTokens } from "@/data/constants";
 import { useState, useEffect } from "react";
 
 import ChatWelcome from "@/components/ChatWelcome";
@@ -33,18 +33,30 @@ const previewItems = [
 
 export default function Home() {
   const schemes = [
-    "accent",
-    "success",
-    "attention",
-    "severe",
-    "done",
-    "sponsors",
-    "open",
+    "auburn",
+    "blue",
+    "brown",
+    "coral",
+    "cyan",
+    "gray",
+    "green",
+    "indigo",
+    "lemon",
+    "lime",
+    "olive",
+    "orange",
+    "pine",
+    "pink",
+    "plum",
+    "purple",
+    "red",
+    "teal",
+    "yellow",
   ];
 
   const [currentIcon, setCurrentIcon] = useState(icons[0]);
-  const [currentColor, setCurrentColor] = useState(allowedColors[0]);
-  const [currentScheme, setCurrentScheme] = useState("accent");
+  const [currentColor, setCurrentColor] = useState(allowedColors.blue);
+  const [currentScheme, setCurrentScheme] = useState("blue");
   const [listIcons, setListIcons] = useState<React.ComponentType<any>[]>([]);
   const [listColors, setListColors] = useState<string[]>([]);
   const [isInverted, setIsInverted] = useState(false);
@@ -65,20 +77,17 @@ export default function Home() {
 
     setListIcons([icons[prevIconIndex], currentIcon, icons[nextIconIndex]]);
 
-    // Get previous, current and next schemes
+    // Get previous, current and next schemes, ensuring we stay within bounds
     const currentSchemeIndex = schemes.indexOf(currentScheme);
     const prevSchemeIndex =
       (currentSchemeIndex - 1 + schemes.length) % schemes.length;
     const nextSchemeIndex = (currentSchemeIndex + 1) % schemes.length;
 
-    const listSchemes = [
+    setListColors([
       schemes[prevSchemeIndex],
       currentScheme,
       schemes[nextSchemeIndex],
-    ];
-
-    // Store scheme names instead of hex values
-    setListColors(listSchemes);
+    ]);
   }, [isInverted, currentIcon, currentScheme]);
 
   const handleIconChange = (
@@ -88,7 +97,7 @@ export default function Home() {
     scheme: string
   ) => {
     setCurrentIcon(icon);
-    setCurrentColor(color);
+    setCurrentColor(allowedColors[scheme as keyof typeof allowedColors]);
     setIsInverted(inverted);
     setCurrentScheme(scheme);
   };
@@ -112,22 +121,19 @@ export default function Home() {
           tokenName={currentScheme}
           bgToken={
             isInverted
-              ? colorTokens[currentScheme as keyof typeof colorTokens].bgMuted
-              : colorTokens[currentScheme as keyof typeof colorTokens].solid
+              ? `--display-${currentScheme}-bgColor-muted`
+              : `--display-${currentScheme}-bgColor-emphasis`
           }
           bgHex={currentColor}
           fgToken={
-            isInverted
-              ? colorTokens[currentScheme as keyof typeof colorTokens].fg
-              : undefined
+            isInverted ? `--display-${currentScheme}-fgColor` : "--bg-default"
           }
           fgHex={
             isInverted
-              ? `var(${
-                  colorTokens[currentScheme as keyof typeof colorTokens].fg
-                })`
-              : "white"
+              ? allowedColors[currentScheme as keyof typeof allowedColors]
+              : "#ffffff"
           }
+          isInverted={isInverted}
         />
       </div>
 
@@ -147,16 +153,23 @@ export default function Home() {
                           isInverted
                             ? `var(${
                                 colorTokens[
-                                  listColors[index] as keyof typeof colorTokens
+                                  (listColors[index] ||
+                                    currentScheme) as keyof typeof colorTokens
                                 ].bg
                               })`
-                            : allowedColors[schemes.indexOf(listColors[index])]
+                            : `var(${
+                                colorTokens[
+                                  (listColors[index] ||
+                                    currentScheme) as keyof typeof colorTokens
+                                ].solid
+                              })`
                         }
                         fgColor={
                           isInverted
                             ? `var(${
                                 colorTokens[
-                                  listColors[index] as keyof typeof colorTokens
+                                  (listColors[index] ||
+                                    currentScheme) as keyof typeof colorTokens
                                 ].fg
                               })`
                             : "white"
@@ -165,7 +178,6 @@ export default function Home() {
                         handle={item.handle}
                       />
                     ))}
-                    {console.log(listColors)}
                   </div>
                 </div>
                 <div className="text-xs text-[var(--color-fg-muted)]">
@@ -180,11 +192,13 @@ export default function Home() {
                     Icon={currentIcon}
                     bgColor={
                       isInverted
-                        ? `var(--color-${currentScheme}-muted)`
+                        ? `var(--display-${currentScheme}-bgColor-muted)`
                         : currentColor
                     }
                     fgColor={
-                      isInverted ? `var(--color-${currentScheme}-fg)` : "white"
+                      isInverted
+                        ? `var(--display-${currentScheme}-fgColor)`
+                        : "white"
                     }
                     title="Core engineering"
                     subtitle="@CoreEng"
@@ -204,11 +218,13 @@ export default function Home() {
                     Icon={currentIcon}
                     bgColor={
                       isInverted
-                        ? `var(--color-${currentScheme}-muted)`
+                        ? `var(--display-${currentScheme}-bgColor-muted)`
                         : currentColor
                     }
                     fgColor={
-                      isInverted ? `var(--color-${currentScheme}-fg)` : "white"
+                      isInverted
+                        ? `var(--display-${currentScheme}-fgColor)`
+                        : "white"
                     }
                   />
                 )}

@@ -18,19 +18,31 @@ type IconGeneratorProps = {
 
 export default function IconGenerator({ onIconChange }: IconGeneratorProps) {
   const [Icon, setIcon] = useState<React.ComponentType<any> | null>(null);
-  const [bgColor, setBgColor] = useState(allowedColors[0]);
+  const [bgColor, setBgColor] = useState(allowedColors.blue);
   const [currentIconIndex, setCurrentIconIndex] = useState(0);
-  const [currentScheme, setCurrentScheme] = useState("accent");
+  const [currentScheme, setCurrentScheme] = useState("blue");
   const [isInverted, setIsInverted] = useState(false);
 
   const schemes = [
-    "accent",
-    "success",
-    "attention",
-    "severe",
-    "done",
-    "sponsors",
-    "open",
+    "auburn",
+    "blue",
+    "brown",
+    "coral",
+    "cyan",
+    "gray",
+    "green",
+    "indigo",
+    "lemon",
+    "lime",
+    "olive",
+    "orange",
+    "pine",
+    "pink",
+    "plum",
+    "purple",
+    "red",
+    "teal",
+    "yellow",
   ];
 
   const generateNewIcon = () => {
@@ -51,8 +63,8 @@ export default function IconGenerator({ onIconChange }: IconGeneratorProps) {
     if (iconComponent) {
       const newScheme = schemes[Math.floor(Math.random() * schemes.length)];
       const newColor = isInverted
-        ? `var(--color-${newScheme}-muted)`
-        : allowedColors[schemes.indexOf(newScheme)];
+        ? `var(--display-${newScheme}-bgColor-muted)`
+        : allowedColors[newScheme as keyof typeof allowedColors];
 
       setIcon(() => iconComponent);
       setBgColor(newColor);
@@ -74,7 +86,9 @@ export default function IconGenerator({ onIconChange }: IconGeneratorProps) {
         Icon={Icon}
         bgColor={bgColor}
         size="large"
-        fgColor={isInverted ? `var(--color-${currentScheme}-fg)` : "white"}
+        fgColor={
+          isInverted ? `var(--display-${currentScheme}-fgColor)` : "white"
+        }
       />
       <div className="flex gap-1">
         <button
