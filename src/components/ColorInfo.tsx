@@ -6,6 +6,7 @@ type ColorInfoProps = {
   fgToken?: string;
   fgHex: string;
   tokenName?: string;
+  isInverted: boolean;
 };
 
 export default function ColorInfo({

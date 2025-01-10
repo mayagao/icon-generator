@@ -1,49 +1,41 @@
 "use client";
 
+import React from "react";
+import type { IconProps } from "@primer/octicons-react";
+
 type IconCircleProps = {
-  Icon: React.ComponentType<{ size: number; className?: string }>;
+  Icon: React.ComponentType<IconProps>;
   bgColor: string;
+  size?: "small" | "medium" | "large";
   fgColor?: string;
-  size?: "small" | "medium" | "large" | "xlarge";
 };
 
 export default function IconCircle({
   Icon,
   bgColor,
+  size = "medium",
   fgColor = "white",
-  size = "large",
 }: IconCircleProps) {
-  const sizeMap = {
-    small: {
-      dimensions: "w-5 h-5",
-      padding: "p-1",
-      iconSize: 12,
-    },
-    medium: {
-      dimensions: "w-8 h-8",
-      padding: "p-2",
-      iconSize: 16,
-    },
-    large: {
-      dimensions: "w-12 h-12",
-      padding: "p-4",
-      iconSize: 24,
-    },
-    xlarge: {
-      dimensions: "w-12 h-12",
-      padding: "p-3",
-      iconSize: 24,
-    },
-  };
+  const circleSize = {
+    small: 20,
+    medium: 32,
+    large: 48,
+  }[size];
 
-  const { dimensions, padding, iconSize } = sizeMap[size];
+  const iconSize = {
+    small: 12,
+    medium: 16,
+    large: 24,
+  }[size];
 
   return (
     <div
-      className={`${dimensions} ${padding} rounded-full flex items-center justify-center`}
+      className="rounded-full flex items-center justify-center"
       style={{
         backgroundColor: bgColor,
         color: fgColor,
+        width: circleSize,
+        height: circleSize,
       }}
     >
       <Icon size={iconSize} />
