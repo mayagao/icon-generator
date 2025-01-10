@@ -1,101 +1,244 @@
-import Image from "next/image";
+"use client";
+
+import IconGenerator from "@/components/IconGenerator";
+import * as OcticonsModule from "@primer/octicons-react";
+import { allowedIcons } from "@/data/icons.json";
+import { allowedColors, mutedScheme, colorTokens } from "@/data/constants";
+import { useState, useEffect } from "react";
+
+import ChatWelcome from "@/components/ChatWelcome";
+
+import ListItem from "@/components/ListItem";
+import Card from "@/components/Card";
+import ColorInfo from "@/components/ColorInfo";
+
+const icons = allowedIcons
+  .map((iconName) => OcticonsModule[iconName as keyof typeof OcticonsModule])
+  .filter(Boolean);
+
+const previewItems = [
+  {
+    title: "Core engineering",
+    handle: "@coreeng",
+  },
+  {
+    title: "Design systems",
+    handle: "@primer",
+  },
+  {
+    title: "Platform tools",
+    handle: "@tools",
+  },
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const schemes = [
+    "accent",
+    "success",
+    "attention",
+    "severe",
+    "done",
+    "sponsors",
+    "open",
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [currentIcon, setCurrentIcon] = useState(icons[0]);
+  const [currentColor, setCurrentColor] = useState(allowedColors[0]);
+  const [currentScheme, setCurrentScheme] = useState("accent");
+  const [listIcons, setListIcons] = useState<React.ComponentType<any>[]>([]);
+  const [listColors, setListColors] = useState<string[]>([]);
+  const [isInverted, setIsInverted] = useState(false);
+
+  const getUniqueRandomItems = <T extends unknown>(
+    items: T[],
+    count: number
+  ): T[] => {
+    const shuffled = [...items].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
+  useEffect(() => {
+    // Get previous, current and next icons
+    const currentIconIndex = icons.indexOf(currentIcon);
+    const prevIconIndex = (currentIconIndex - 1 + icons.length) % icons.length;
+    const nextIconIndex = (currentIconIndex + 1) % icons.length;
+
+    setListIcons([icons[prevIconIndex], currentIcon, icons[nextIconIndex]]);
+
+    // Get previous, current and next schemes
+    const currentSchemeIndex = schemes.indexOf(currentScheme);
+    const prevSchemeIndex =
+      (currentSchemeIndex - 1 + schemes.length) % schemes.length;
+    const nextSchemeIndex = (currentSchemeIndex + 1) % schemes.length;
+
+    const listSchemes = [
+      schemes[prevSchemeIndex],
+      currentScheme,
+      schemes[nextSchemeIndex],
+    ];
+
+    // Store scheme names instead of hex values
+    setListColors(listSchemes);
+  }, [isInverted, currentIcon, currentScheme]);
+
+  const handleIconChange = (
+    icon: React.ComponentType<any>,
+    color: string,
+    inverted: boolean,
+    scheme: string
+  ) => {
+    setCurrentIcon(icon);
+    setCurrentColor(color);
+    setIsInverted(inverted);
+    setCurrentScheme(scheme);
+  };
+
+  const getRandomIcon = () => {
+    const index = Math.floor(Math.random() * icons.length);
+    return icons[index];
+  };
+
+  const getRandomColor = () => {
+    const index = Math.floor(Math.random() * allowedColors.length);
+    return allowedColors[index];
+  };
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl mb-3">Random Icon Generator</h1>
+      <div className="flex items-start gap-4 flex-wrap mb-8">
+        <IconGenerator onIconChange={handleIconChange} />
+        <ColorInfo
+          tokenName={currentScheme}
+          bgToken={
+            isInverted
+              ? colorTokens[currentScheme as keyof typeof colorTokens].bgMuted
+              : colorTokens[currentScheme as keyof typeof colorTokens].solid
+          }
+          bgHex={currentColor}
+          fgToken={
+            isInverted
+              ? colorTokens[currentScheme as keyof typeof colorTokens].fg
+              : undefined
+          }
+          fgHex={
+            isInverted
+              ? `var(${
+                  colorTokens[currentScheme as keyof typeof colorTokens].fg
+                })`
+              : "white"
+          }
+        />
+      </div>
+
+      <div className="grid gap-8">
+        <div>
+          <h2 className="text-lg font-semibold mb-4">Preview</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div>
+                <div className="border border-[var(--color-border-muted)] rounded-lg overflow-hidden mb-2">
+                  <div className="flex flex-col">
+                    {previewItems.map((item, index) => (
+                      <ListItem
+                        key={item.handle}
+                        Icon={listIcons[index] || currentIcon}
+                        bgColor={
+                          isInverted
+                            ? `var(${
+                                colorTokens[
+                                  listColors[index] as keyof typeof colorTokens
+                                ].bg
+                              })`
+                            : allowedColors[schemes.indexOf(listColors[index])]
+                        }
+                        fgColor={
+                          isInverted
+                            ? `var(${
+                                colorTokens[
+                                  listColors[index] as keyof typeof colorTokens
+                                ].fg
+                              })`
+                            : "white"
+                        }
+                        title={item.title}
+                        handle={item.handle}
+                      />
+                    ))}
+                    {console.log(listColors)}
+                  </div>
+                </div>
+                <div className="text-xs text-[var(--color-fg-muted)]">
+                  Use case: List item preview • Icon size: 12px • Circle size:
+                  20px
+                </div>
+              </div>
+
+              <div>
+                <div className="border border-[var(--color-border-muted)] rounded-lg overflow-hidden mb-2">
+                  <Card
+                    Icon={currentIcon}
+                    bgColor={
+                      isInverted
+                        ? `var(--color-${currentScheme}-muted)`
+                        : currentColor
+                    }
+                    fgColor={
+                      isInverted ? `var(--color-${currentScheme}-fg)` : "white"
+                    }
+                    title="Core engineering"
+                    subtitle="@CoreEng"
+                    description="Comes preconfigured with access to Jira and Confluence projects."
+                  />
+                </div>
+                <div className="text-xs text-[var(--color-fg-muted)]">
+                  Use case: Card preview • Icon size: 16px • Circle size: 32px
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div className="border border-[var(--color-border-muted)] rounded-lg overflow-hidden mb-2">
+                {currentIcon && (
+                  <ChatWelcome
+                    Icon={currentIcon}
+                    bgColor={
+                      isInverted
+                        ? `var(--color-${currentScheme}-muted)`
+                        : currentColor
+                    }
+                    fgColor={
+                      isInverted ? `var(--color-${currentScheme}-fg)` : "white"
+                    }
+                  />
+                )}
+              </div>
+              <div className="text-xs text-[var(--color-fg-muted)]">
+                Use case: Welcome screen • Icon size: 24px • Circle size: 48px
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-2">Available Icons</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {icons.map((Icon, index) =>
+              Icon ? (
+                <div
+                  key={allowedIcons[index]}
+                  className="flex items-center gap-2"
+                >
+                  <Icon size={24} />
+                  <span className="font-mono text-sm">
+                    {allowedIcons[index]}
+                  </span>
+                </div>
+              ) : null
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,77 @@
+/* Emphasis colors */
+.bg-accent-emphasis {
+  background-color: #0969da;
+}
+.bg-success-emphasis {
+  background-color: #1a7f37;
+}
+.bg-attention-emphasis {
+  background-color: #9a6700;
+}
+.bg-severe-emphasis {
+  background-color: #bc4c00;
+}
+.bg-danger-emphasis {
+  background-color: #cf222e;
+}
+.bg-done-emphasis {
+  background-color: #8250df;
+}
+.bg-sponsors-emphasis {
+  background-color: #1b7c83;
+}
+.bg-open-emphasis {
+  background-color: #6639ba;
+}
+
+/* Muted backgrounds */
+.bg-accent-muted {
+  background-color: #ddf4ff;
+}
+.bg-success-muted {
+  background-color: #dafbe1;
+}
+.bg-attention-muted {
+  background-color: #fff8c5;
+}
+.bg-severe-muted {
+  background-color: #fff1e5;
+}
+.bg-danger-muted {
+  background-color: #ffebe9;
+}
+.bg-done-muted {
+  background-color: #fbefff;
+}
+.bg-sponsors-muted {
+  background-color: #ddf4ff;
+}
+.bg-open-muted {
+  background-color: #f6f8fa;
+}
+
+/* Foreground colors */
+.fg-accent {
+  color: #0969da;
+}
+.fg-success {
+  color: #1a7f37;
+}
+.fg-attention {
+  color: #9a6700;
+}
+.fg-severe {
+  color: #bc4c00;
+}
+.fg-danger {
+  color: #cf222e;
+}
+.fg-done {
+  color: #8250df;
+}
+.fg-sponsors {
+  color: #1b7c83;
+}
+.fg-open {
+  color: #6639ba;
+}

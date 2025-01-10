@@ -1,0 +1,16 @@
+{
+  "allowedIcons": [
+    "ServerIcon",
+    "CodeIcon",
+    "BookIcon",
+    "TelescopeIcon",
+    "BeakerIcon",
+    "RocketIcon",
+    "GlobeIcon",
+    "LightBulbIcon",
+    "SquirrelIcon",
+    "ToolsIcon",
+    "MortarBoardIcon",
+    "OrganizationIcon"
+  ]
+}
